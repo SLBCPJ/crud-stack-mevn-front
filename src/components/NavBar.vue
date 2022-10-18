@@ -1,22 +1,16 @@
 <template>
   <div>
-    <v-toolbar app dark>
+    <v-app-bar app dark>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-  <!--     <router-link :to="{path: '/'}">
-      <v-toolbar-title >MY APP</v-toolbar-title>
-      </router-link> -->
-      <v-tabs align-with-title>
-          <v-tab :to="{path: '/'}">MY APP</v-tab>
-         <!--  <v-tab>Tab 2</v-tab>
-          <v-tab>Tab 3</v-tab> -->
-        </v-tabs>
+      <v-toolbar-title>MY APP</v-toolbar-title>
+      <v-btn text :to="{path: '/'}">
+        <span class="mr-2">Home</span>
+      </v-btn>
       <v-spacer></v-spacer>
-      <!-- <router-link to="/login"> -->
-        <v-btn icon :to="{path: '/login'}">
-          <v-icon>mdi-export</v-icon>
-        </v-btn>
-    <!-- </router-link> -->
-    </v-toolbar>
+      <v-btn text v-for="(item,index) in routes" :key="index" @click="insertRoute(item.route)">
+        <span class="mr-2">{{item.name}}</span>
+      </v-btn>
+    </v-app-bar>
     <v-navigation-drawer app v-model="drawer" absolute temporary>
       <v-list-item>
         <v-list-item-avatar>
@@ -37,7 +31,9 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title :to="{path: '/'}">{{ item.title }}</v-list-item-title>
+            <v-list-item-title :to="{ path: '/' }">{{
+            item.title
+            }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -49,12 +45,22 @@ export default {
   name: "NavBar",
   data() {
     return {
+      routes: [
+        { name: "About", route: "/about" },
+        { name: "Products", route: "/product/:id" },
+        { name: "Login", route: "/login" },
+      ],
       drawer: false,
       items: [
         { title: "Home", icon: "mdi-view-dashboard" },
         { title: "About", icon: "mdi-forum" },
       ],
     };
+  },
+  methods: {
+    insertRoute(route) {
+      this.$router.push(route);
+    },
   },
 };
 </script>
