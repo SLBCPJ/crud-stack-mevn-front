@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-row>
-            <v-col v-for="(item,index) in items" :key="index">
+            <v-col v-for="(item,index) in items" :key="index" class="ma-2">
                 <v-card class="mx-auto" max-width="344">
                     <v-img :src="item.download_url" height="200px"></v-img>
 

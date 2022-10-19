@@ -7,6 +7,7 @@
 
 <script>
 import appImg from '@/components/Imagen.vue';
+import { mapGetters, mapActions } from 'vuex';
 export default {
     name: 'Imagenes',
     components: {
@@ -17,23 +18,13 @@ export default {
     },
     data() {
         return {
-            items: []
         }
     },
     methods: {
-        loadImgs: async function () {
-            try {
-                const setting = {
-                    method: 'GET'
-                }
-                const url = 'https://picsum.photos/v2/list?page=2&limit=10'
-                const data = await fetch(url, setting)
-                const json = await data.json()
-                this.items = json
-            } catch (e) {
-                console.log(e);
-            }
-        }
+        ...mapActions('images',['loadImgs'])
+    },
+    computed:{
+        ...mapGetters('images',['items'])
     }
 }
 </script>
