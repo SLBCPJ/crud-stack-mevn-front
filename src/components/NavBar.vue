@@ -7,7 +7,7 @@
         <span class="mr-2">Home</span>
       </v-btn>
       <v-spacer></v-spacer>
-      <v-btn text v-for="(item,index) in routes" :key="index" @click="insertRoute(item.route)">
+      <v-btn text v-for="(item,index) in routes" :key="index" @click="insertRoute(item.path)" >
         <span class="mr-2">{{item.name}}</span>
       </v-btn>
     </v-app-bar>
@@ -46,9 +46,10 @@ export default {
   data() {
     return {
       routes: [
-        { name: "About", route: "/about" },
-        { name: "Products", route: "/product/:id" },
-        { name: "Login", route: "/login" },
+        { name: "About", path: "/about" },
+        { name: "Products", path: "/product" },
+        { name: "Images", path: "/images" },
+        { name: "Login", path: "/login" },
       ],
       drawer: false,
       items: [

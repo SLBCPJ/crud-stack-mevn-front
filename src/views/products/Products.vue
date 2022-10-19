@@ -1,23 +1,42 @@
 <template>
-    <div>
-        <h1>Vista de productos:{{$router.params.id}}</h1>
-<!--         <div class="text-center">
-        <v-pagination
-          v-model="page"
-          :length="4"
-          circle
-        ></v-pagination>
-      </div> -->
+  <v-container mt-5>
+    <div class="text-center">
+      <v-btn class="mb-5" color="primary" @click="visible()">Mostrar</v-btn>
+      <appAlert v-if="success" type="success" message="Esto es una alerta" @salir="success = $event"></appAlert>
+      <appAlert v-if="error" type="error" message="Esto es una alerta de error" @salir="error = $event"></appAlert>
+      <appAlert v-if="warning" type="warning" message="Esto es una advertencia" @salir="warning = $event"></appAlert>
+
     </div>
+
+  </v-container>
 </template>
 
 <script>
+import appAlert from '@/components/Alerts.vue';
 export default {
-    data () {
-      return {
-        page: 1,
-      }
-    },
+  name: 'Products',
+  components: {
+    appAlert
+  },
+  data() {
+    return {
+      success: false,
+      error: false,
+      warning:false
+    }
+  },
+  methods: {
+    visible(){
+      this.success = true
+      this.error = true
+      this.warning = true
+    }
+  },
+  watch: {
+    // page(){
+    //   this.$router.push('/product/'+this.page)
+    // }
+  }
 }
 </script>
 
