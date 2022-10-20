@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import images from "./images";
+import products from "./products";
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -15,6 +16,7 @@ export default new Vuex.Store({
   actions: {
   },
   modules: {
-    images
+    images,
+    products
   }
 })

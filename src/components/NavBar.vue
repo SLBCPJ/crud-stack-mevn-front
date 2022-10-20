@@ -49,6 +49,7 @@ export default {
         { name: "About", path: "/about" },
         { name: "Products", path: "/product" },
         { name: "Images", path: "/images" },
+        { name: "Clients", path: "/client" },
         { name: "Login", path: "/login" },
       ],
       drawer: false,

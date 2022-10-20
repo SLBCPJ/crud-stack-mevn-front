@@ -1,45 +1,57 @@
 <template>
   <v-container mt-5>
-    <div class="text-center">
-      <v-btn class="mb-5" color="primary" @click="visible()">Mostrar</v-btn>
-      <appAlert v-if="success" type="success" message="Esto es una alerta" @salir="success = $event"></appAlert>
-      <appAlert v-if="error" type="error" message="Esto es una alerta de error" @salir="error = $event"></appAlert>
-      <appAlert v-if="warning" type="warning" message="Esto es una advertencia" @salir="warning = $event"></appAlert>
-
-    </div>
-
+    <appTableComponent
+      Title="Productos"
+      :headers="Header"
+      :Items="items"
+    ></appTableComponent>
   </v-container>
 </template>
 
 <script>
-import appAlert from '@/components/Alerts.vue';
+import appAlert from "@/components/Alerts.vue";
+import { mapActions, mapGetters } from "vuex";
+import appTableComponent from "@/components/products/Table.vue";
 export default {
-  name: 'Products',
+  name: "Products",
   components: {
-    appAlert
+    appAlert,
+    appTableComponent,
+  },
+  created() {
+    this.loadProducts();
   },
   data() {
     return {
-      success: false,
-      error: false,
-      warning:false
-    }
+      Header: [
+        {
+          text: "Nombre",
+          value: "name",
+        },
+        {
+          text: "Precio",
+          value: "price",
+        },
+        {
+          text: "Stock",
+          value: "stock",
+        },
+        {
+          text: "Activo",
+          value: "active",
+        },
+        {
+          text: "Acciones",
+          value: "actions",
+        },
+      ],
+    };
   },
   methods: {
-    visible(){
-      this.success = true
-      this.error = true
-      this.warning = true
-    }
+    ...mapActions("products", ["loadProducts"]),
   },
-  watch: {
-    // page(){
-    //   this.$router.push('/product/'+this.page)
-    // }
-  }
-}
+  computed: {
+    ...mapGetters("products", ["items"]),
+  },
+};
 </script>
-
-<style lang="scss" scoped>
-
-</style>

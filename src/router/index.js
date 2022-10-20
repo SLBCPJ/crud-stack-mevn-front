@@ -8,7 +8,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'home',
+    name: 'Home',
     component: HomeView
   },
   {
@@ -22,6 +22,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "products" */ '../views/products/Products.vue')
   },
   {
+    path: '/client',
+    name: 'Client',
+    component: () => import(/* webpackChunkName: "products" */ '../views/clients/Client.vue')
+  },
+  {
     path: '/images',
     name: 'images',
     component: () => import(/* webpackChunkName: "products" */ '@/views/images/Images.vue')
@@ -30,9 +35,9 @@ const routes = [
     path: "/login",
     name: "Login",
     component: Login,
-    // meta: {
-    //   isAuth: true,
-    // },
+    meta: {
+      // isAuth: true,
+    },
   },
   {
     path: '*',
@@ -46,6 +51,15 @@ const router = new VueRouter({
   routes,
   linkActiveClass: "active",
   linkExactActiveClass: "active"
+})
+router.beforeEach((to,from,next)=>{
+  console.log(to);
+  let documentTitle = `${process.env.VUE_APP_TITLE} - ${to.name}`
+  if (to.params.title) {
+    documentTitle += ` - ${to.params.title}`
+  }
+  document.title = documentTitle
+  next()
 })
 
 export default router
