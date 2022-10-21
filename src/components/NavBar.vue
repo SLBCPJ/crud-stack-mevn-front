@@ -7,8 +7,19 @@
         <span class="mr-2">Home</span>
       </v-btn>
       <v-spacer></v-spacer>
-      <v-btn text v-for="(item,index) in routes" :key="index" @click="insertRoute(item.path)" >
+      <v-btn text v-for="(item,index) in routes" :key="index" @click="insertRoute(item.path)">
         <span class="mr-2">{{item.name}}</span>
+      </v-btn>
+      <v-spacer></v-spacer>
+      <v-btn text :to="{path: '/auth/register'}">
+        <span class="mr-2">Register</span>
+      </v-btn>
+      <v-btn text :to="{path: '/auth/login'}">
+        <span class="mr-2">Login</span>
+      </v-btn>
+
+      <v-btn text to="logout" @click.prevent="logoutUser">
+        <span class="mr-2">Logout</span>
       </v-btn>
     </v-app-bar>
     <v-navigation-drawer app v-model="drawer" absolute temporary>
@@ -41,8 +52,12 @@
   </div>
 </template>
 <script>
+import { mapActions, mapGetters } from 'vuex';
 export default {
   name: "NavBar",
+  // computed: {
+  //   ...mapGetters(['isLoggedIn'])
+  // },
   data() {
     return {
       routes: [
@@ -50,7 +65,8 @@ export default {
         { name: "Products", path: "/product" },
         { name: "Images", path: "/images" },
         { name: "Clients", path: "/client" },
-        { name: "Login", path: "/login" },
+        { name: "Register", path: "/auth/register" },
+
       ],
       drawer: false,
       items: [
@@ -60,6 +76,10 @@ export default {
     };
   },
   methods: {
+    ...mapActions('logout'),
+    logoutUser() {
+      this.logout()
+    },
     insertRoute(route) {
       this.$router.push(route);
     },

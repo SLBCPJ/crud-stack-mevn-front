@@ -29,14 +29,22 @@ const routes = [
   {
     path: '/images',
     name: 'images',
-    component: () => import(/* webpackChunkName: "products" */ '@/views/images/Images.vue')
+    component: () => import(/* webpackChunkName: "products" */ '@/views/images/Images.vue'),
+    meta:{
+      requiresAuth: true
+    }
   },
   {
-    path: "/login",
+    path: '/auth/register',
+    name: 'Register',
+    component: () => import(/* webpackChunkName: "products" */ '@/views/auth/Register.vue')
+  },
+  {
+    path: "/auth/login",
     name: "Login",
     component: Login,
     meta: {
-      // isAuth: true,
+      requiresGuest: true
     },
   },
   {
@@ -53,7 +61,7 @@ const router = new VueRouter({
   linkExactActiveClass: "active"
 })
 router.beforeEach((to,from,next)=>{
-  console.log(to);
+  // console.log(to);
   let documentTitle = `${process.env.VUE_APP_TITLE} - ${to.name}`
   if (to.params.title) {
     documentTitle += ` - ${to.params.title}`

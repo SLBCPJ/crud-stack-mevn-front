@@ -1,26 +1,16 @@
 <template>
   <div>
-    <h1 class="text-center mt-5">{{ Title }}</h1>
+    <appFormComponent :dialog="dialog" @dialog="dialog = $event" :item="itemSelected" />
     <v-card>
       <v-card-title>
         {{ Title }}
         <v-spacer></v-spacer>
-        <v-text-field
-          v-model="search"
-          append-icon="mdi-shopping"
-          label="Buscar"
-          single-line
-          hide-details
-        ></v-text-field>
+        <v-text-field v-model="search" append-icon="mdi-shopping" label="Buscar" single-line hide-details>
+        </v-text-field>
         <v-spacer></v-spacer>
-        <v-btn color="primary" dark class="mb-2"> Nuevo </v-btn>
+        <v-btn color="primary" dark class="mb-2" @click="newItem()"> Nuevo </v-btn>
       </v-card-title>
-      <v-data-table
-        :headers="headers"
-        :items="Items"
-        :items-per-page="5"
-        class="elevation-1"
-      >
+      <v-data-table :headers="headers" :items="Items" :items-per-page="5" :search="search" class="elevation-1">
         <template v-slot:[`item.active`]="{ item }">
           <v-chip :color="getColor(item.active)" dark>
             {{ item.active }}
@@ -30,13 +20,7 @@
         <template v-slot:[`item.actions`]="{ item }">
           <v-tooltip bottom color="warning">
             <template v-slot:activator="{ on, attrs }">
-              <v-icon
-                small
-                class="mr-2"
-                @click="edit(item)"
-                v-bind="attrs"
-                v-on="on"
-              >
+              <v-icon small class="mr-2" @click="editItem(item)" v-bind="attrs" v-on="on">
                 mdi-pencil
               </v-icon>
             </template>
@@ -59,18 +43,38 @@
 <script>
 import Swal from "sweetalert2";
 import { mapActions } from "vuex";
+import appFormComponent from './Form.vue';
 export default {
   props: ["Title", "headers", "Items"],
+  components: {
+    appFormComponent
+  },
   data() {
     return {
       search: "",
+      dialog: false,
+      itemSelected: {}
     };
   },
   methods: {
     ...mapActions("products", ["deleteProduct"]),
+    newItem() {
+      this.dialog = true;
+        this.itemSelected = {
+          _id: '',
+          name: '',
+          price: 0,
+          stock: 0,
+          active: true
+        }
+    },
+    editItem(item) {
+      this.itemSelected = item
+      this.dialog = true
+    },
     remove(item) {
       Swal.fire({
-        title: "Are you sure?",
+        title: `Desea eliminar el producto con el id: <i>${item._id}</i>?`,
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
