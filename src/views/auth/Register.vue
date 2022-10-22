@@ -19,9 +19,10 @@
                     Registrar
                 </v-btn>
 
-                <v-btn color="error" class="mr-4" @click="reset"> Reset Form </v-btn>
+               <!--  <v-btn color="error" class="mr-4" @click="reset"> Reset Form </v-btn>
 
-                <v-btn color="warning" @click="resetValidation"> Reset Validation </v-btn>
+                <v-btn color="warning" @click="resetValidation"> Reset Validation </v-btn> -->
+                {{token}}
             </v-form>
         </v-container>
     </div>
@@ -32,6 +33,7 @@ import { mapActions, mapState } from 'vuex';
 export default {
     name: 'Register',
     data: () => ({
+        token:'',
         show1: false,
         user: {
             name: '',
@@ -54,6 +56,9 @@ export default {
             (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
         ],
     }),
+    mounted(){
+        this.token = this.$store.getters.getToken
+    },
 
     methods: {
         ...mapActions('auth', ['createUser']),

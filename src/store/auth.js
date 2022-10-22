@@ -9,7 +9,8 @@ export default {
     user: {},
     status: "",
     error: "",
-    token: localStorage.getItem("token") || "",
+    token: "",
+    valor: "",
   },
   getters: {
     /*     isLoggedIn:function(state) {
@@ -19,17 +20,16 @@ export default {
         return false
       }
     } */
-    isLoggedIn: (state) => !!state.token,
-    authStatus: (state) => state.status,
-    getError: (state) => state.error,
+
+    getTokenD: (state) => {
+      state.token = localStorage.getItem("token");
+      return state.token;
+    },
   },
   mutations: {
-    auth_request(state) {
-      state.status = "loading";
-    },
-    auth_success(state, token) {
-      state.status = "success";
-      state.token = token;
+    setTokenD: (state, payload) => {
+      state.token = payload;
+      localStorage.setItem("token", payload);
     },
     setUser(state, user) {
       state.user = user;
@@ -37,33 +37,28 @@ export default {
     setError(state, error) {
       state.error = error;
     },
-    logout(state) {
-      state.staus = "";
-      state.token = "";
-    },
   },
   actions: {
     // Login Action
-    login({commit}, user){
-      return new Promise((resolve, reject) => {
-        commit('auth_request')
-        axios({url: 'auth/login', data: user, method: 'POST' })
-        .then(resp => {
-          const token = 'Bearer '+resp.data.token
-          const user = resp.data.user
-          localStorage.setItem('token', token)
-          axios.defaults.headers.common['Authorization'] = token
-          commit('auth_success', token, user)
-          commit('setUser',user)
-          commit('setError', '')
-          resolve(resp)
-        })
-        .catch(err => {
-          localStorage.removeItem('token')
-          reject(err)
-        })
-      })
-  },
+
+    login({ commit }, payload) {
+      try {
+        const config = {
+          method: payload.method,
+          url: payload.url,
+          data: payload.data,
+        };
+        axios(config).then((res) => {
+          if (res.status === 200) {
+            if (res.data) {
+              commit("setToken", res.data.token);
+            }
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
 
     // Register
     /*  async createUser({ commit }, user) {
@@ -82,24 +77,24 @@ export default {
       }
     }, */
 
-    register({commit}, user){
+    register({ commit }, user) {
       return new Promise((resolve, reject) => {
-        commit('auth_request')
-        axios({url: 'auth/register', data: user, method: 'POST' })
-        .then(resp => {
-          const token = 'Bearer '+resp.data.token
-          const user = resp.data.user
-          localStorage.setItem('token', token)
-          axios.defaults.headers.common['Authorization'] = token
-          commit('auth_success', token, user)
-          commit('setError', '')
-          resolve(resp)
-        })
-        .catch(error => {
-          localStorage.removeItem('token')
-          reject(error)
-        })
-      })
+        commit("auth_request");
+        axios({ url: "auth/register", data: user, method: "POST" })
+          .then((resp) => {
+            const token = "Bearer " + resp.data.token;
+            const user = resp.data.user;
+            localStorage.setItem("token", token);
+            axios.defaults.headers.common["Authorization"] = token;
+            commit("auth_success", token, user);
+            commit("setError", "");
+            resolve(resp);
+          })
+          .catch((error) => {
+            localStorage.removeItem("token");
+            reject(error);
+          });
+      });
     },
 
     // Logout the user
